@@ -122,13 +122,14 @@ Create a new API route that handles:
 3. Add your environment variables in Vercel's project settings
 4. Deploy!
 
-## Assessment Submission
 
-When submitting your assessment, provide:
+## Submission
 
-1. **GitHub Repository URL**: Make sure it's public
-2. **Live Demo URL**: Your Vercel deployment
-3. **Supabase Credentials**: Add these to your README for testing:
+When submitting your project, provide the following:
+
+1. **A link to your public GitHub repository.**
+2. **A link to your live deployment on Vercel.**
+3. **Supabase Project URL and Anon Key** (add these here so we can interact with your live demo):
    ```
    SUPABASE_URL: [Your Supabase Project URL]
    SUPABASE_ANON_KEY: [Your Supabase Anon Key]

@@ -16,16 +16,57 @@ export default function Home() {
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null)
 
   const generateProblem = async () => {
-    // TODO: Implement problem generation logic
-    // This should call your API route to generate a new problem
-    // and save it to the database
+      setIsLoading(true)
+      setFeedback('')
+      setIsCorrect(null)
+      setUserAnswer('')
+      try {
+        const res = await fetch('/api/problem', { method: 'POST' })
+        const data = await res.json()
+        if (data.session) {
+          setProblem({
+            problem_text: data.session.problem_text,
+            final_answer: data.session.correct_answer,
+          })
+          setSessionId(data.session.id)
+        } else {
+          setProblem(null)
+          setSessionId(null)
+          setFeedback('Failed to generate problem.')
+        }
+      } catch (err) {
+        setProblem(null)
+        setSessionId(null)
+        setFeedback('Error generating problem.')
+      } finally {
+        setIsLoading(false)
+      }
   }
 
   const submitAnswer = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement answer submission logic
-    // This should call your API route to check the answer,
-    // save the submission, and generate feedback
+      if (!sessionId) return
+      setIsLoading(true)
+      setFeedback('')
+      setIsCorrect(null)
+      try {
+        const res = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: sessionId, user_answer: Number(userAnswer) })
+        })
+        const data = await res.json()
+        if (data.submission) {
+          setFeedback(data.submission.feedback_text)
+          setIsCorrect(data.submission.is_correct)
+        } else {
+          setFeedback('Failed to submit answer.')
+        }
+      } catch (err) {
+        setFeedback('Error submitting answer.')
+      } finally {
+        setIsLoading(false)
+      }
   }
 
   return (
